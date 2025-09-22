@@ -67,7 +67,7 @@ const Esign = () => {
             } else {
               await apiService.esignCheck(esignData?.id);
               showSingleToast(response.message);
-              navigate("/requestedEntries");
+              navigate("/cdu/requestedEntries");
             }
           },
         };

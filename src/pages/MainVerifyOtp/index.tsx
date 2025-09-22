@@ -2,30 +2,29 @@ import React, { useState, useCallback } from "react";
 import { Box, Button, Typography, useTheme } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
 
-import { useResendTimer } from "../hooks/useResendTimer";
-import { apiService } from "../services/api.service";
+import { useResendTimer } from "../../hooks/useResendTimer";
+import { apiService } from "../../services/api.service";
 import {
   setCombinedUserData,
   setFormTexts,
   setMultipleUser,
   setUser,
-} from "../slices/app";
+} from "../../slices/app";
 
-import StyledOTPInput from "../components/common/StyledOTPInput";
-import StyledCenterBox from "../components/common/CenterBox";
-import Error from "../components/common/Error";
+import StyledOTPInput from "../../components/common/StyledOTPInput";
+import StyledCenterBox from "../../components/common/CenterBox";
+import Error from "../../components/common/Error";
 
-import SMCLogo from "../assests/assets/SMCLogo.svg";
-import OTPImg from "../assests/assets/otp.svg";
-import Tick from "../assests/assets/Tick.svg";
-import Clock from "../assests/assets/clock.svg";
-import extractErrorAndShowToast from "../utils/extract-error";
-import { showSingleToast } from "../utils/toast-util";
-import extractError from "../utils/extract-error-only";
+import SMCLogo from "../../assests/assets/SMCLogo.svg";
+import OTPImg from "../../assests/assets/otp.svg";
+import Tick from "../../assests/assets/Tick.svg";
+import Clock from "../../assests/assets/clock.svg";
+import extractErrorAndShowToast from "../../utils/extract-error";
+import { showSingleToast } from "../../utils/toast-util";
+import extractError from "../../utils/extract-error-only";
 
-const VerifyOtp = () => {
+const MainVerifyOtp = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -90,15 +89,21 @@ const VerifyOtp = () => {
 
           const users = await apiService.getUserList();
           dispatch(setMultipleUser(users));
+          
+          // Check if there's a target project from URL
+          const targetProject = sessionStorage.getItem('targetProject');
+          
           if (users.length > 1) {
-            navigate("/cdu/clientList");
+            navigate("/client-list");
           } else {
             dispatch(setUser(users[0]));
-            navigate("/cdu/dashboard");
-            // const consent = await apiService.getFormTexts();
-            // const result = await apiService.getCombinedUserData();
-            // dispatch(setCombinedUserData(result));
-            // dispatch(setFormTexts(consent));
+            
+            // Route to specific project or project selection
+            if (targetProject) {
+              navigate(`/${targetProject}`);
+            } else {
+              navigate("/project-selection");
+            }
           }
         } else {
           setIsOtpVerified(false);
@@ -107,7 +112,6 @@ const VerifyOtp = () => {
         }
       } catch (err: any) {
         setIsOtpVerified(false);
-
         const apiMsg = extractError(
           err,
           "Failed to verify OTP. Please try again."
@@ -130,6 +134,8 @@ const VerifyOtp = () => {
         flexDirection: "column",
         alignItems: "center",
         gap: 4,
+        minHeight: "100vh",
+        backgroundColor: theme.palette.background.default,
       }}
     >
       <img src={SMCLogo} alt="SMC Logo" width={200} height={60} />
@@ -146,6 +152,7 @@ const VerifyOtp = () => {
             borderRadius: 2,
             width: { xs: 350, md: 440 },
             minHeight: { xs: "75vh", md: 500 },
+            backgroundColor: theme.palette.background.paper,
           }}
         >
           <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
@@ -198,7 +205,7 @@ const VerifyOtp = () => {
                 }}
               >
                 <Typography variant="h6" sx={{ fontSize: "0.875rem" }}>
-                  Didn’t get the code?{" "}
+                  Didn't get the code?{" "}
                   <span
                     style={{
                       fontWeight: 600,
@@ -246,7 +253,7 @@ const VerifyOtp = () => {
                 variant="subtitle2"
                 component="span"
                 onClick={() => {
-                  navigate("/cdu");
+                  navigate("/");
                 }}
                 color="link.main"
                 data-testid={`title__re-enter`}
@@ -262,4 +269,4 @@ const VerifyOtp = () => {
   );
 };
 
-export default VerifyOtp;
+export default MainVerifyOtp;

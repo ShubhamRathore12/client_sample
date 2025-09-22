@@ -41,7 +41,7 @@ const EntryCard: React.FC<EntryCardProps> = ({ text, id, item }) => {
       dispatch(setRejectionText(changeEntries?.segmentMeta?.reviewText));
       dispatch(setRequestType("segment changes."));
     }
-    navigate(`/requestedEntries/viewEntry/${id}`);
+    navigate(`/cdu/requestedEntries/viewEntry/${id}`);
   };
 
   return (

@@ -77,16 +77,16 @@ const ViewEntryStatus = (props: Props) => {
         requestType.includes("email")
       ) {
         target = "CONTACT";
-        route = "/updateContact/esign";
+        route = "/cdu/updateContact/esign";
       } else if (requestType.includes("nominee")) {
         target = "NOMINEE";
-        route = "/updateNominee/esign";
+        route = "/cdu/updateNominee/esign";
       } else if (requestType.includes("bank")) {
         target = "BANK_ACCOUNT";
-        route = "/updateBank/esign";
+        route = "/cdu/updateBank/esign";
       } else {
         target = "CONTACT";
-        route = "/updateContact/esign";
+        route = "/cdu/updateContact/esign";
       }
       const response: any = await apiService.changeRequestEsignProceed(target);
       if (response?.data?.esign) {

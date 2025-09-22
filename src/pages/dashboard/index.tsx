@@ -71,7 +71,7 @@ const Dashboard: React.FC = () => {
             logo={rquestedEntries}
             text="Already Requested Entries"
             selected={false}
-            func={() => navigate("/requestedEntries")}
+            func={() => navigate("/cdu/requestedEntries")}
             bgColor="linear-gradient(90deg, #265949 0%, #52BF9D 133.99%)"
             textColor={theme.palette.background.default}
           />
@@ -91,25 +91,25 @@ const Dashboard: React.FC = () => {
             logo={updateContact}
             text="Update Contact Details"
             selected={false}
-            func={() => navigate("/updateContact")}
+            func={() => navigate("/cdu/updateContact")}
           />
           <DashboardCard
             logo={addBank}
             text="Add Bank Details"
             selected={false}
-            func={() => navigate("/updateBank")}
+            func={() => navigate("/cdu/updateBank")}
           />
           <DashboardCard
             logo={updateNominne}
             text="Update Nominee Details"
             selected={false}
-            func={() => navigate("/updateNominee")}
+            func={() => navigate("/cdu/updateNominee")}
           />
           <DashboardCard
             logo={addSegment}
             text="Segment Addition"
             selected={false}
-            func={() => isAllSegmentsActive ? showSingleToast.error("All Segments are already activated") :navigate("/addSegment")}
+            func={() => isAllSegmentsActive ? showSingleToast.error("All Segments are already activated") : navigate("/cdu/addSegment")}
           />
         </StyledCenterBox>
       </Box>

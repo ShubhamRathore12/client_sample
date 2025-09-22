@@ -127,7 +127,7 @@ const UpdateContact: React.FC = () => {
       );
 
       showSingleToast("OTP sent successfully");
-      navigate("/updateContact/verify");
+      navigate("/cdu/updateContact/verify");
     } catch (error: any) {
       extractErrorAndShowToast(error);
     } finally {

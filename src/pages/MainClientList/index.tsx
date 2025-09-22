@@ -3,14 +3,14 @@ import { Box, Button, Typography, useTheme } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import { RootState } from "../../store"; // adjust path as needed
-import { setCombinedUserData, setFormTexts, setUser } from "../../slices/app"; // adjust path as needed
-import ClientCard from "../../components/common/ClientCard"; // adjust path as needed
+import { RootState } from "../../store";
+import { setCombinedUserData, setFormTexts, setUser } from "../../slices/app";
+import ClientCard from "../../components/common/ClientCard";
 import { apiService } from "../../services/api.service";
 import SMCLogo from "../../assests/assets/SMCLogo.svg";
 import extractErrorAndShowToast from "../../utils/extract-error";
 
-const ClientList: React.FC = () => {
+const MainClientList: React.FC = () => {
   const theme = useTheme();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -30,11 +30,15 @@ const ClientList: React.FC = () => {
     try {
       const users: any = await apiService.getUserList(String(selectedClientId));
       dispatch(setUser(...users));
-      // const result = await apiService.getCombinedUserData();
-      // const consent = await apiService.getFormTexts();
-      // dispatch(setCombinedUserData(result));
-      // dispatch(setFormTexts(consent));
-      navigate("/cdu/dashboard");
+      
+      // Check if there's a target project from URL
+      const targetProject = sessionStorage.getItem('targetProject');
+      
+      if (targetProject) {
+        navigate(`/${targetProject}`);
+      } else {
+        navigate("/project-selection");
+      }
     } catch (err) {
       extractErrorAndShowToast(err);
     }
@@ -49,6 +53,8 @@ const ClientList: React.FC = () => {
         flexDirection: "column",
         alignItems: "center",
         gap: 4,
+        minHeight: "100vh",
+        backgroundColor: theme.palette.background.default,
       }}
     >
       <img src={SMCLogo} alt="SMC Logo" width={200} height={60} />
@@ -63,6 +69,7 @@ const ClientList: React.FC = () => {
           borderRadius: 2,
           width: { xs: 350, md: 440 },
           minHeight: { xs: "75vh", md: 500 },
+          backgroundColor: theme.palette.background.paper,
         }}
       >
         <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
@@ -102,4 +109,4 @@ const ClientList: React.FC = () => {
   );
 };
 
-export default ClientList;
+export default MainClientList;
