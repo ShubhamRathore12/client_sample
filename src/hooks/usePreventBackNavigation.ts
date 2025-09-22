@@ -7,7 +7,7 @@ const usePreventBackNavigation = () => {
     window.history.pushState(null, "", window.location.href);
 
     const handlePopState = () => {
-      if (window.location.pathname === "/dashboard") {
+      if (window.location.pathname === "/cdu/dashboard") {
         window.location.reload(); // Refresh dashboard instead of going back
       }
     };

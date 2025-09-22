@@ -35,14 +35,14 @@ class ApiService {
       (error: AxiosError) => {
         if (error.response?.status === 401) {
           if (typeof window !== "undefined") {
-            const publicRoutes = ["/", "/login", "/verifyOTP"];
+            const publicRoutes = ["/", "/main-verify-otp", "/project-selection", "/cdu", "/cdu/verify-otp", "/rekyc", "/ddpi", "/account-closures"];
             const currentPath = window.location.pathname;
 
             const isPublic = publicRoutes.includes(currentPath);
 
             if (!isPublic) {
               localStorage.clear();
-              window.location.href = "/login";
+              window.location.href = "/";
             }
           }
         }

@@ -52,7 +52,7 @@ const UpdateNominee = () => {
         "The sum of the share percentages of all nominees is 100%. Please update percentage share of nominee first"
       );
     } else {
-      navigate("/updateNominee/NomineeForm");
+      navigate("/cdu/updateNominee/NomineeForm");
     }
   };
 
@@ -61,7 +61,7 @@ const UpdateNominee = () => {
     try {
       const response = await apiService.proceedNominee();
       dispatch(setEsignData(response?.esign));
-      navigate("/updateNominee/esign");
+      navigate("/cdu/updateNominee/esign");
     } catch (error) {
       extractErrorAndShowToast(error);
     } finally {

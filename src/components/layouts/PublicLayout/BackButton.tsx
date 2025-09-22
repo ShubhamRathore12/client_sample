@@ -13,9 +13,9 @@ const BackButton = ({ onClick }: { onClick?: () => void }) => {
     if (onClick) {
       onClick();
     } else {
-      if (location.pathname === "/requestedEntries") {
-        navigate("/dashboard");
-      } else if (location.pathname === "/updateContact/esign") {
+      if (location.pathname === "/cdu/requestedEntries") {
+        navigate("/cdu/dashboard");
+      } else if (location.pathname === "/cdu/updateContact/esign") {
         navigate(-2);
       } else {
         navigate(-1);

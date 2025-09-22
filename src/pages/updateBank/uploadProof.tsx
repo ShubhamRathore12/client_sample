@@ -63,7 +63,7 @@ const UploadProof = () => {
       dispatch(setUploadResponse(result));
       dispatch(setEsignData(esignData));
       showSingleToast("File uploaded successfully!");
-      navigate("/updateBank/esign");
+      navigate("/cdu/updateBank/esign");
     } catch (err: any) {
       extractErrorAndShowToast(err);
     }

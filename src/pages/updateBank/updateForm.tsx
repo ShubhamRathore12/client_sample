@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 
 import { useFormik, FormikHelpers } from "formik";
-import * as Yup from "yup";
+import * Yup from "yup";
 import React, { useEffect, useRef, useState } from "react";
 import { bankFieldConfig } from "../../constants/bankConstants";
 import { useNavigate } from "react-router-dom";
@@ -192,15 +192,15 @@ const UpdateForm = () => {
             payload
           );
           dispatch(setEsignData(esignData));
-          navigate("/updateBank/esign");
+          navigate("/cdu/updateBank/esign");
           //  else {
-          //   navigate("/updateBank/esign");
+          //   navigate("/cdu/updateBank/esign");
           // }
         } else if (status === "FAILED") {
           stopPolling();
           const bankProofRequired = response?.nextSteps?.BankProof?.required;
           if (bankProofRequired) {
-            navigate("/updateBank/uploadProof");
+            navigate("/cdu/updateBank/uploadProof");
           }
           // showSingleToast.error("Bank verification failed.");
           showSingleToast.error(response?.msg || "Bank verification failed.");

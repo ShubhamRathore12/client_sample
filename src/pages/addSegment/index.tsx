@@ -73,11 +73,11 @@ const AddSegment: React.FC = () => {
       if (response?.nextSteps?.FileUpload?.required) {
         showSingleToast(response?.nextSteps?.FileUpload?.msg);
         // navigate("/addSegment/segmentUpload");
-        navigate("/addSegment/segmentUpload/mannual");
+        navigate("/cdu/addSegment/segmentUpload/mannual");
       } else {
         showSingleToast("Segment request initiated");
         dispatch(setEsignData(response?.data?.esign));
-        navigate("/addSegment/esign");
+        navigate("/cdu/addSegment/esign");
       }
     } catch (error: any) {
       extractErrorAndShowToast(error);

@@ -72,7 +72,7 @@ function SegmentUploadDialog({}: Props) {
       const result: any = await apiService.uploadSegmentFile(file, id, segmentProofType?.id);
       dispatch(setEsignData(result?.data?.esign));
       showSingleToast("File uploaded successfully!");
-      navigate("/addSegment/esign");
+      navigate("/cdu/addSegment/esign");
     } catch (err: any) {
       extractErrorAndShowToast(err);
     }

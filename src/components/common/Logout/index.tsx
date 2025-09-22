@@ -27,7 +27,7 @@ const Logout = () => {
       showSingleToast("Logout successfully");
       localStorage.clear();
       sessionStorage.clear();
-      navigate("/login", { replace: true });
+      navigate("/", { replace: true });
       dispatch(setLogoutPopupState(false));
     } catch (err) {
        extractErrorAndShowToast(err);

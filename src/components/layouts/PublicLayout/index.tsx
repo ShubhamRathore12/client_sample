@@ -18,7 +18,7 @@ const PublicLayout: React.FC<Props> = ({ children }) => {
   const isAboveMd = useMediaQuery(theme.breakpoints.up("md"));
   const navigate = useNavigate();
   // Define routes where the back button should be hidden
-  const hideBackButtonRoutes = ["/dashboard"];
+  const hideBackButtonRoutes = ["/cdu/dashboard", "/project-selection"];
   const shouldHideBackButton = hideBackButtonRoutes.includes(
     window.location.pathname
   );

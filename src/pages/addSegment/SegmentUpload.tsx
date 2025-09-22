@@ -62,7 +62,7 @@ function SegmentUpload({}: Props) {
                 }}
                 startIcon={<DocumentScanner />}
                 onClick={() => {
-                  navigate("/addSegment/segmentUpload/mannual")
+                  navigate("/cdu/addSegment/segmentUpload/mannual")
                 }}
               >
                 Upload Documents Manually
