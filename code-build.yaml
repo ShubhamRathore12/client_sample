@@ -1,0 +1,37 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 18
+    commands:
+      - npm i --force # Install dependencies
+
+  pre_build:
+    commands:
+      - echo "Generating .env from .env.example and AWS Parameter Store..."
+      - echo $IMAGE_REPO_NAME
+      - >
+        grep -v -E '^$|^#' .env.example | while IFS= read -r line; do
+          KEY_NAME=$(echo $line | awk -F'=' '{print $1}') && [[ -n $KEY_NAME ]] &&
+          echo "$KEY_NAME=$(aws ssm get-parameter --name "/$IMAGE_REPO_NAME/$KEY_NAME" --query "Parameter.Value" --output text --with-decryption)" >> .env;
+        done
+      - echo "Printing .env variables"
+      - cat .env
+
+  build:
+    commands:
+      - echo "Building the React application..."
+      - npm run build # Build the React application
+
+  post_build:
+    commands:
+      - echo "Post Build Completed"
+
+cache:
+  paths:
+    - "node_modules/**/*" # Cache the node_modules directory
+
+artifacts:
+  files:
+    - "**/*"

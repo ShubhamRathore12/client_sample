@@ -1,0 +1,33 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 18
+
+  pre_build:
+    commands:
+      - echo "Pre Build Completed"
+
+  build:
+    commands:
+      - echo "Building the React application Completed"
+
+  post_build:
+    commands:
+      # AWS CLI commands to sync built files to S3 bucket and create CloudFront invalidation
+      - >
+        aws s3 sync dist/ s3://$BUCKET/ --delete --exclude "*.html"
+        --metadata-directive REPLACE --cache-control max-age=86400,public
+      - >
+        aws s3 cp dist/ s3://$BUCKET/ --exclude "*" --include "*.html"
+        --metadata-directive REPLACE --cache-control max-age=0,no-cache,no-store,must-revalidate --recursive
+      - aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths "/*"
+
+cache:
+  paths:
+    - "node_modules/**/*" # Cache the node_modules directory
+
+artifacts:
+  files:
+    - "**/*"
