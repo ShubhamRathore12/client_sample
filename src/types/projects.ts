@@ -24,7 +24,7 @@ export const PROJECTS: Project[] = [
     id: "rekyc",
     name: "rekyc",
     displayName: "Re-KYC",
-    description: "Re-Know Your Customer",
+    description: "Re-Know Your Customer process",
     icon: "/assets/projects/rekyc.svg",
     route: "/rekyc",
     bgColor: "linear-gradient(90deg, #4A90E2 0%, #7BB3F0 133.99%)",

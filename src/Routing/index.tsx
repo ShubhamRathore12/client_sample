@@ -108,6 +108,9 @@ import SegmentUploadDialog from "../pages/addSegment/UploadDialog";
 
 // Other Module Routes
 import RekycDashboard from "../modules/rekyc/pages/Dashboard";
+import RekycLogin from "../modules/rekyc/pages/Login";
+import RekycVerifyOtp from "../modules/rekyc/pages/VerifyOtp";
+import RekycClientList from "../modules/rekyc/pages/ClientList";
 import DDPIDashboard from "../modules/ddpi/pages/Dashboard";
 import AccountClosuresDashboard from "../modules/account-closures/pages/Dashboard";
 
@@ -158,7 +161,12 @@ const Routing = (props: Props) => {
         <Route path="/cdu/client-list" element={<ClientList />} />
 
         {/* Other Module Routes */}
-        <Route path="/rekyc" element={<RekycDashboard />} />
+        <Route element={<PublicMainLoginRoute />}>
+          <Route path="/rekyc" element={<RekycLogin />} />
+        </Route>
+        <Route path="/rekyc/verify-otp" element={<RekycVerifyOtp />} />
+        <Route path="/rekyc/client-list" element={<RekycClientList />} />
+        <Route path="/rekyc/dashboard" element={<RekycDashboard />} />
         <Route path="/ddpi" element={<DDPIDashboard />} />
         <Route path="/account-closures" element={<AccountClosuresDashboard />} />
 
@@ -193,7 +201,6 @@ const Routing = (props: Props) => {
           {/* Legacy routes for backward compatibility */}
           <Route path="/login" element={<Navigate to="/cdu" replace />} />
           <Route path="/verifyOTP" element={<Navigate to="/cdu/verify-otp" replace />} />
-          <Route path="/dashboard" element={<Navigate to="/cdu/dashboard" replace />} />
           <Route path="/clientList" element={<Navigate to="/cdu/clientList" replace />} />
           <Route path="/updateBank" element={<Navigate to="/cdu/updateBank" replace />} />
           <Route path="/updateContact" element={<Navigate to="/cdu/updateContact" replace />} />
