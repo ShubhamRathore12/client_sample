@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 
 import { useFormik, FormikHelpers } from "formik";
-import * Yup from "yup";
+import * as Yup from "yup";
 import React, { useEffect, useRef, useState } from "react";
 import { bankFieldConfig } from "../../constants/bankConstants";
 import { useNavigate } from "react-router-dom";

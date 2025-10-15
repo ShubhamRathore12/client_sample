@@ -6,7 +6,7 @@ import arrow from "../../../assests/assets/arrow.svg";
 import React from "react";
 
 interface DashboardCardProps {
-  logo: string;
+  logo: string | React.ReactNode;
   text: string;
   selected?: boolean;
   func?: () => void;
@@ -65,13 +65,19 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
           flex: 1,
         }}
       >
-        <img
-          src={logo}
-          alt="Card logo"
-          width={32}
-          height={32}
-          style={{ alignSelf: "flex-start" }}
-        />
+        {typeof logo === 'string' ? (
+          <img
+            src={logo}
+            alt="Card logo"
+            width={32}
+            height={32}
+            style={{ alignSelf: "flex-start" }}
+          />
+        ) : (
+          <div style={{ alignSelf: "flex-start" }}>
+            {logo}
+          </div>
+        )}
         <Typography
           variant="body1"
           sx={{ fontWeight: 400, color: textColor || "inherit" }}

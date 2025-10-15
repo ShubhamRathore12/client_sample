@@ -58,15 +58,17 @@ module.exports = (_, argv) => ({
       {
         test: /\.svg$/,
         type: 'asset/inline',
-        type: "asset/inline",
       },
       {
         test: /\.(ts|tsx|js|jsx)$/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
-          loader: "babel-loader",
         },
+      },
+      {
+        test: /\.json$/,
+        type: "json",
       },
     ],
   },
