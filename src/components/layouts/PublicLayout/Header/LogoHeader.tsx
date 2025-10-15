@@ -1,9 +1,15 @@
 import { Box, Typography, useTheme } from "@mui/material";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import SMCLogo from "../../../../assests/assets/SMCLogo.svg";
 
 const LogoHeader = () => {
   const theme = useTheme();
+  const navigate = useNavigate();
+
+  const handleLogoClick = () => {
+    navigate("/project-selection");
+  };
 
   return (
     <Box
@@ -27,7 +33,11 @@ const LogoHeader = () => {
         // width={103}
         width={130}
         height={40}
-        style={{ alignSelf: "flex-start" }}
+        style={{
+          alignSelf: "flex-start",
+          cursor: "pointer"
+        }}
+        onClick={handleLogoClick}
       />
     </Box>
   );
