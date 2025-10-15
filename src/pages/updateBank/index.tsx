@@ -103,8 +103,7 @@ const UpdateBank = () => {
     onSubmit: onSubmit,
   });
 
-  // const handleSubmit = () => navigate("/updateBank/addBankAccount");
-  const handleSubmit = () => navigate("/cdu/updateBank/addBankAccount");
+  const handleSubmit = () => navigate("/updateBank/addBankAccount");
 
   if (
     // changeRequestsStatus?.status &&

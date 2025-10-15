@@ -134,7 +134,7 @@ const VerifyOTP = ({ type, regMobile, regEmail }: VerifyOTPProps) => {
         dispatch(setEsignData(response.esign));
       }
       setIsOtpVerified(true);
-      navigate("/cdu/updateContact/esign");
+      navigate("/updateContact/esign");
     } catch (err: any) {
       const apiMsg = extractError(
         err,

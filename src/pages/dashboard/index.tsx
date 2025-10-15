@@ -22,6 +22,7 @@ import { apiService } from "../../services/api.service";
 import usePreventBackNavigation from "../../hooks/usePreventBackNavigation";
 import { RootState } from "../../store";
 import { showSingleToast } from "../../utils/toast-util";
+import { SECTION_LABELS } from "../requestedEntries";
 
 const Dashboard: React.FC = () => {
   const theme = useTheme();
@@ -30,6 +31,29 @@ const Dashboard: React.FC = () => {
   usePreventBackNavigation();
   const isAllSegmentsActive = useSelector(
     (state: RootState) => state?.app?.data?.current?.isAllSegmentsActive
+  );
+
+  const changeEntries = useSelector(
+    (state: any) => state.app?.data?.changesRequests
+  );
+
+  const flattenedRequests = Object.entries(changeEntries || {}).flatMap(
+    ([key, entries]: [string, any]) => {
+      if (
+        key === "nominee" &&
+        changeEntries?.nomineeMeta?.isPendingOnUser === true
+      ) {
+        return [];
+      }
+
+      if (!Array.isArray(entries)) return [];
+
+      return entries.map((entry: any) => ({
+        ...entry,
+        section: SECTION_LABELS[key] || key,
+        fieldKey: key,
+      }));
+    }
   );
 
   useEffect(() => {
@@ -64,19 +88,6 @@ const Dashboard: React.FC = () => {
           margin: "auto",
         }}
       >
-        <StyledCenterBox
-          sx={{ flexDirection: "column", width: "100%", gap: 2 }}
-        >
-          <DashboardCard
-            logo={rquestedEntries}
-            text="Already Requested Entries"
-            selected={false}
-            func={() => navigate("/cdu/requestedEntries")}
-            bgColor="linear-gradient(90deg, #265949 0%, #52BF9D 133.99%)"
-            textColor={theme.palette.background.default}
-          />
-        </StyledCenterBox>
-
         <Typography
           variant="body1"
           sx={{ fontWeight: 500, alignSelf: "start", fontSize: "1.25rem" }}
@@ -91,27 +102,46 @@ const Dashboard: React.FC = () => {
             logo={updateContact}
             text="Update Contact Details"
             selected={false}
-            func={() => navigate("/cdu/updateContact")}
+            func={() => navigate("/updateContact")}
           />
           <DashboardCard
             logo={addBank}
             text="Add Bank Details"
             selected={false}
-            func={() => navigate("/cdu/updateBank")}
+            func={() => navigate("/updateBank")}
           />
           <DashboardCard
             logo={updateNominne}
             text="Update Nominee Details"
             selected={false}
-            func={() => navigate("/cdu/updateNominee")}
+            func={() => navigate("/updateNominee")}
           />
           <DashboardCard
             logo={addSegment}
             text="Segment Addition"
             selected={false}
-            func={() => isAllSegmentsActive ? showSingleToast.error("All Segments are already activated") : navigate("/cdu/addSegment")}
+            func={() =>
+              isAllSegmentsActive
+                ? showSingleToast.error("All Segments are already activated")
+                : navigate("/addSegment")
+            }
           />
         </StyledCenterBox>
+
+        {!!flattenedRequests?.length && (
+          <StyledCenterBox
+            sx={{ flexDirection: "column", width: "100%", gap: 2 }}
+          >
+            <DashboardCard
+              logo={rquestedEntries}
+              text="Request History"
+              selected={false}
+              func={() => navigate("/requestedEntries")}
+              bgColor="linear-gradient(90deg, #265949 0%, #52BF9D 133.99%)"
+              textColor={theme.palette.background.default}
+            />
+          </StyledCenterBox>
+        )}
       </Box>
     </PublicLayout>
   );

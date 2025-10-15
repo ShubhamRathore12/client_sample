@@ -34,7 +34,7 @@ const ClientList: React.FC = () => {
       // const consent = await apiService.getFormTexts();
       // dispatch(setCombinedUserData(result));
       // dispatch(setFormTexts(consent));
-      navigate("/cdu/dashboard");
+      navigate("/dashboard");
     } catch (err) {
       extractErrorAndShowToast(err);
     }

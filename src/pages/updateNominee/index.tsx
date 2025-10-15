@@ -1,4 +1,13 @@
-import { Box, Button, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  Radio,
+  RadioGroup,
+  Typography,
+} from "@mui/material";
 import ContentBox from "../../components/common/ContentBox";
 import PublicLayout from "../../components/layouts/PublicLayout";
 import React, { useState } from "react";
@@ -19,6 +28,9 @@ import extractErrorAndShowToast from "../../utils/extract-error";
 import useCombinedNominees from "../../hooks/useCombinedNominee";
 import ViewEntryStatus from "../../components/common/ViewEntryStatus";
 import { showSingleToast } from "../../utils/toast-util";
+import {
+  NOMINEE_YES_CONSENT,
+} from "../../constants/nomineeConstants";
 
 const UpdateNominee = () => {
   const navigate = useNavigate();
@@ -26,6 +38,7 @@ const UpdateNominee = () => {
   useFetchCombinedData();
   const [loading, setLoading] = useState(false);
   const nominees = useCombinedNominees();
+  const [nominationName, setNominationName] = useState("yes");
 
   const changeRequests = useSelector(
     (state: RootState) => state?.app?.data?.changesRequests?.nominee || []
@@ -52,21 +65,30 @@ const UpdateNominee = () => {
         "The sum of the share percentages of all nominees is 100%. Please update percentage share of nominee first"
       );
     } else {
-      navigate("/cdu/updateNominee/NomineeForm");
+      navigate("/updateNominee/NomineeForm");
     }
   };
 
   const proceedWithEsign = async () => {
     setLoading(true);
     try {
-      const response = await apiService.proceedNominee();
+      const response = await apiService.proceedNominee(
+        nominationName === "name" ? "?showOnStatementChoice=name" : undefined
+      );
       dispatch(setEsignData(response?.esign));
-      navigate("/cdu/updateNominee/esign");
+      navigate("/updateNominee/esign");
     } catch (error) {
       extractErrorAndShowToast(error);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleNominationRadioChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const newValue = event.target.value;
+    setNominationName(newValue);
   };
 
   if (
@@ -134,8 +156,33 @@ const UpdateNominee = () => {
           </Typography>
         ) : null}
 
-        {changeRequests?.length && allVerified ? (
+        {changeRequests?.length &&
+        allVerified &&
+        totalSharePercentage === 100 ? (
           <Box sx={{ width: "100%", textAlign: "center" }}>
+            <FormControl fullWidth sx={{ marginTop: 2 }}>
+              <FormLabel id="radio-group-label" sx={{ textAlign: "left" }}>
+                {NOMINEE_YES_CONSENT}
+              </FormLabel>
+              <RadioGroup
+                aria-labelledby="radio-group-label"
+                name="nominee-radio-group"
+                value={nominationName}
+                onChange={handleNominationRadioChange}
+              >
+                <FormControlLabel
+                  value="name"
+                  control={<Radio />}
+                  label="Name of Nominee's"
+                />
+                <FormControlLabel
+                  value="yes"
+                  control={<Radio />}
+                  label="Nomination: Yes"
+                />
+              </RadioGroup>
+            </FormControl>
+
             <Button
               type="submit"
               fullWidth
@@ -144,10 +191,9 @@ const UpdateNominee = () => {
               disabled={totalSharePercentage !== 100 || loading}
               sx={{
                 marginTop: 2,
-                display: totalSharePercentage !== 100 && "none",
               }}
             >
-              {loading ? "Proceeding to Esign" : " Proceed to Esign"}
+              {loading ? "Proceeding" : " Proceed"}
             </Button>
           </Box>
         ) : null}

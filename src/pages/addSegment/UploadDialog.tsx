@@ -4,6 +4,7 @@ import {
   Button,
   IconButton,
   Stack,
+  TextField,
   Typography,
   useTheme,
 } from "@mui/material";
@@ -32,10 +33,13 @@ function SegmentUploadDialog({}: Props) {
   const fileRef = React.useRef<HTMLInputElement>(null);
   const [file, setFile] = React.useState<File | null>(null);
   const [fileName, setFileName] = React.useState<string>("");
+  const [isFilePasswordProtected, setIsFilePasswordProtected] =
+    React.useState<boolean>(false);
+  const [filePassword, setFilePassword] = React.useState<string | null>(null);
   const theme = useTheme();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-   const segmentProofType = useSelector(
+  const segmentProofType = useSelector(
     (state: RootState) => state.app.segmentProofType
   );
   const segmentResponse = useSelector(
@@ -69,11 +73,19 @@ function SegmentUploadDialog({}: Props) {
       return;
     }
     try {
-      const result: any = await apiService.uploadSegmentFile(file, id, segmentProofType?.id);
+      const result: any = await apiService.uploadSegmentFile(
+        file,
+        id,
+        segmentProofType?.id,
+        filePassword
+      );
       dispatch(setEsignData(result?.data?.esign));
       showSingleToast("File uploaded successfully!");
-      navigate("/cdu/addSegment/esign");
+      navigate("/addSegment/esign");
     } catch (err: any) {
+      if (err?.nextSteps?.RequirePassword) {
+        setIsFilePasswordProtected(true);
+      }
       extractErrorAndShowToast(err);
     }
   };
@@ -87,7 +99,7 @@ function SegmentUploadDialog({}: Props) {
   };
   return (
     <PublicLayout>
-      <ContentBox sx={{ marginTop: 4, gap: 8 }} isBoxShadow={false}>
+      <ContentBox sx={{ marginTop: 4, gap: 4 }} isBoxShadow={false}>
         <Stack gap={1}>
           <Typography variant="body1">Upload income proof</Typography>
           <Typography variant="h6">
@@ -96,7 +108,7 @@ function SegmentUploadDialog({}: Props) {
           </Typography>
         </Stack>
         <>
-          <Stack gap={4}>
+          <Stack gap={2}>
             <Box
               sx={{
                 backgroundColor: theme.palette.text.yellowBackground,
@@ -113,9 +125,7 @@ function SegmentUploadDialog({}: Props) {
               </Typography>
             </Box>
 
-            <Typography variant="h6">
-              {segmentProofType?.value}
-            </Typography>
+            <Typography variant="h6">{segmentProofType?.value}</Typography>
             <>
               <input
                 type="file"
@@ -137,7 +147,7 @@ function SegmentUploadDialog({}: Props) {
               sx={{
                 display: "flex",
                 alignItems: "center",
-                gap: 1,
+                // gap: 1,
                 maxWidth: "100%",
                 overflow: "hidden",
                 justifyContent: "center",
@@ -167,6 +177,19 @@ function SegmentUploadDialog({}: Props) {
                 </IconButton>
               )}
             </Box>
+
+            {isFilePasswordProtected && (
+              <Stack>
+                <Typography variant="subtitle2" gutterBottom>
+                  File Password
+                </Typography>
+                <TextField
+                  onChange={(e) => setFilePassword(e.target.value)}
+                  value={filePassword}
+                  type="password"
+                />
+              </Stack>
+            )}
             <Button
               variant="contained"
               onClick={handleUpload}

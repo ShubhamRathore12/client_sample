@@ -375,7 +375,7 @@ const initialState: InitialState = {
     Segment: [],
     SegmentProofType: [],
   },
-  delayText: "You have to wait for 7 days before requesting another change",
+  delayText: "You have to wait for 2 days before requesting another change",
   rejectionText: "",
   requestType:
     "phone number/email/bank details/nominee changes/segment addition",

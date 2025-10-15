@@ -7,6 +7,7 @@ import {
   FormControlLabel,
   Stack,
   Typography,
+  useTheme,
 } from "@mui/material";
 import axios from "axios";
 import ContentBox from "../ContentBox";
@@ -34,6 +35,7 @@ declare global {
 }
 
 const Esign = () => {
+  const theme = useTheme();
   const navigate = useNavigate();
   const routerLocation = useRouterLocation();
   const { location } = useLocation();
@@ -67,7 +69,7 @@ const Esign = () => {
             } else {
               await apiService.esignCheck(esignData?.id);
               showSingleToast(response.message);
-              navigate("/cdu/requestedEntries");
+              navigate("/requestedEntries");
             }
           },
         };
@@ -85,7 +87,7 @@ const Esign = () => {
         if (
           error instanceof Error &&
           !axios.isAxiosError(error) &&
-          error.name === "TypeError" 
+          error.name === "TypeError"
         ) {
           handleError(
             new Error(
@@ -180,8 +182,24 @@ const Esign = () => {
               justifyContent: "center",
             }}
           >
+            <Box
+              sx={{
+                marginBottom: "2rem",
+                border: "1px solid",
+                textAlign: "center",
+                padding: 0.5,
+                borderRadius: 2,
+                background: theme.palette?.background?.border,
+              }}
+            >
+              <Typography variant="h6" sx={{color: theme.palette.text.primary}}>
+                <strong>NOTE:</strong> Kindly enable your location services to proceed with
+                esign.
+              </Typography>
+            </Box>
+
             <Typography variant="body1" sx={{ fontWeight: 500 }}>
-              Digitally signs your documents required for Updating
+              Digitally sign the documents required to update your CDU request
             </Typography>
 
             {error && (
@@ -214,7 +232,8 @@ const Esign = () => {
                         <Typography
                           sx={{ fontWeight: 500, fontSize: "13px !important" }}
                         >
-                         I am fine with requesting a change for my submitted entry and am willing to complete the e-sign process
+                          I am fine with requesting a change for my submitted
+                          entry and am willing to complete the e-sign process
                         </Typography>
                       </Stack>
                     }
@@ -250,7 +269,8 @@ const Esign = () => {
                     • I understand the policies and procedures of Stoxkart.
                   </Typography> */}
                   <Typography sx={{ fontSize: 10 }}>
-                    • Changes will take upto 7 working days after successful acceptance of change request.
+                    • Changes will take upto 2 working days after successful
+                    acceptance of change request.
                   </Typography>
                 </>
               )}
@@ -261,7 +281,7 @@ const Esign = () => {
                 variant="contained"
                 disabled={!agreed}
               >
-                ESign
+                Submit & Esign
               </Button>
             </Box>
           </Box>

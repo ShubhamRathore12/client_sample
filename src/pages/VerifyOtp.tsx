@@ -91,10 +91,10 @@ const VerifyOtp = () => {
           const users = await apiService.getUserList();
           dispatch(setMultipleUser(users));
           if (users.length > 1) {
-            navigate("/cdu/clientList");
+            navigate("/clientList");
           } else {
             dispatch(setUser(users[0]));
-            navigate("/cdu/dashboard");
+            navigate("/dashboard");
             // const consent = await apiService.getFormTexts();
             // const result = await apiService.getCombinedUserData();
             // dispatch(setCombinedUserData(result));
@@ -246,7 +246,7 @@ const VerifyOtp = () => {
                 variant="subtitle2"
                 component="span"
                 onClick={() => {
-                  navigate("/cdu");
+                  navigate("/login");
                 }}
                 color="link.main"
                 data-testid={`title__re-enter`}

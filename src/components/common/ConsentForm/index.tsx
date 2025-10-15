@@ -10,18 +10,18 @@ interface ConsentFormProps {
   text?: string;
 }
 
-const consetText =  `I/We hereby request Stoxkart to do changes in Trading and
+const consetText = `I/We hereby request Stoxkart to do changes in Trading and
             Demat account I/we hold with Stoxkart. I/We confirm & declare that the
             changes belongs to me and I/We authorise Stoxkart / Exchanges /
             Depositories to use this changes to send me/us any information
-            / alert / email.`
+            / alert / email.`;
 
 const ConsentForm: React.FC<ConsentFormProps> = ({
   checked = false,
   onChange = () => {},
   error,
   touched,
-  text = consetText
+  text = consetText,
 }) => {
   return (
     <Box sx={{ width: "100%" }}>
@@ -29,11 +29,7 @@ const ConsentForm: React.FC<ConsentFormProps> = ({
         control={
           <Checkbox name="consent" checked={checked} onChange={onChange} />
         }
-        label={
-          <Typography variant="subtitle2">
-          {text}
-          </Typography>
-        }
+        label={<Typography variant="subtitle2" align="left">{text}</Typography>}
       />
       {touched && error && (
         <Typography variant="caption" color="error">

@@ -106,6 +106,7 @@
     "recharts": "^2.5.0",
     "redux": "^4.2.1",
     "redux-persist": "^6.0.0",
+    "redux-persist-transform-encrypt": "^5.1.1",
     "resolve-url-loader": "^5.0.0",
     "styled-components": "^5.3.6",
     "swiper": "^11.2.10",

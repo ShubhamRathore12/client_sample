@@ -1,4 +1,12 @@
-import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
+import {
+  Box,
+  Button,
+  IconButton,
+  Stack,
+  TextField,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
@@ -25,6 +33,9 @@ const UploadProof = () => {
   const navigate = useNavigate();
   const fileRef = React.useRef<HTMLInputElement>(null);
   const [file, setFile] = React.useState<File | null>(null);
+  const [isFilePasswordProtected, setIsFilePasswordProtected] =
+    React.useState<boolean>(false);
+  const [filePassword, setFilePassword] = React.useState<string | null>(null);
   const [fileName, setFileName] = React.useState<string>("");
   const statusResponse = useSelector(
     (state: RootState) => state.app.statusBankInfo
@@ -52,7 +63,11 @@ const UploadProof = () => {
       return;
     }
     try {
-      const result: any = await apiService.uploadBankProofFile(file, accountId);
+      const result: any = await apiService.uploadBankProofFile(
+        file,
+        accountId,
+        filePassword
+      );
       const payload = {
         toProceed: {
           target: "BANK_ACCOUNT",
@@ -63,8 +78,11 @@ const UploadProof = () => {
       dispatch(setUploadResponse(result));
       dispatch(setEsignData(esignData));
       showSingleToast("File uploaded successfully!");
-      navigate("/cdu/updateBank/esign");
+      navigate("/updateBank/esign");
     } catch (err: any) {
+      if (err?.nextSteps?.RequirePassword) {
+        setIsFilePasswordProtected(true);
+      }
       extractErrorAndShowToast(err);
     }
   };
@@ -155,11 +173,25 @@ const UploadProof = () => {
             )}
           </Box>
         </Box>
-        <Typography variant="subtitle2" mt={1}>
+        <Typography variant="subtitle2">
           Formats allowed: JPG, JPEG, PNG, PDF. Max size 5MB
         </Typography>
+
+        {isFilePasswordProtected && (
+          <Stack>
+            <Typography variant="subtitle2" gutterBottom>
+              File Password
+            </Typography>
+            <TextField
+              sx={{ width: { xs: "280px", md: "376px" } }}
+              onChange={(e) => setFilePassword(e.target.value)}
+              value={filePassword}
+              type="password"
+            />
+          </Stack>
+        )}
         <Button variant="contained" sx={{ mt: 3 }} onClick={handleUpload}>
-          Proceed to E-sign
+          Proceed
         </Button>
       </ContentBox>
     </PublicLayout>

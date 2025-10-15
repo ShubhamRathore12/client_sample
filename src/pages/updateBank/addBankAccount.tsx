@@ -109,7 +109,7 @@ const AddBank = () => {
         if (status === "SUCCESS") {
           stopAll();
           dispatch(setBankFormType("EDIT"));
-          navigate("/cdu/updateBank/updateForm");
+          navigate("/updateBank/updateForm");
           // const bankProofRequired =
           //   response?.data?.nextSteps?.BankProof?.required;
           // const payload = {
@@ -134,10 +134,10 @@ const AddBank = () => {
           // showSingleToast.error("UPI verification failed. Please try again.");
           showSingleToast.error(response?.msg || "Bank verification failed.");
           if (bankProofRequired) {
-            navigate("/cdu/updateBank/uploadProof");
+            navigate("/updateBank/uploadProof");
           }
           if (manualRequired) {
-            navigate("/cdu/updateBank/updateForm");
+            navigate("/updateBank/updateForm");
           }
         }
       } catch (err) {
@@ -195,7 +195,7 @@ const AddBank = () => {
             <Button
               fullWidth
               variant="outlined"
-              onClick={() => navigate("/cdu/updateBank/updateForm")}
+              onClick={() => navigate("/updateBank/updateForm")}
               sx={{ width: { xs: "100%", md: "60%" } }}
             >
               Enter Details Manually

@@ -18,7 +18,7 @@ export const bankFieldConfig = [
   },
   {
     name: "holderName",
-    label: "Account Holder Name",
+    label: "Account Holder Name (As per bank)",
     type: "text",
   },
   {

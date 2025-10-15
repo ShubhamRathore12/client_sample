@@ -1,10 +1,10 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
-import toast from "react-hot-toast";
 import { Toast } from "../types/app";
 import { CDUResponse } from "../types/cdu";
 import getRoute from "../utils/get-route";
+import { showSingleToast } from "../utils/toast-util";
 
-const BASE_URL = process.env.REACT_APP_BASE_URL;
+const BASE_URL = process.env.BASE_URL;
 
 export const apiService = axios.create({
   baseURL: `${BASE_URL}/api/user`,

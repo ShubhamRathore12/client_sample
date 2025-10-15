@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import useFetchCombinedData from "../../hooks/useFetchCombinedData";
 import useRedirectBackToDashboard from "../../hooks/useRedirectBackToDashboard";
 
-const SECTION_LABELS: Record<string, string> = {
+export const SECTION_LABELS: Record<string, string> = {
   mobile: "Mobile Number Update",
   email: "Email Update",
   nominee: "Nominee Updates",
@@ -35,13 +35,22 @@ const RequestedEntries = () => {
   //   }
   // );
 
+  const nomineeExtraction = (enteries) => {
+    return enteries.filter((item) => item?.status !== "VERIFIED" || item?.status !== "DRAFT");
+  };
+
   const flattenedRequests = Object.entries(changeEntries || {}).flatMap(
     ([key, entries]: [string, any]) => {
       if (
-        key === "nominee" &&
-        changeEntries?.nomineeMeta?.isPendingOnUser === true
+        key === "nominee"
+        // && changeEntries?.nomineeMeta?.isPendingOnUser === true
       ) {
-        return [];
+        // return [];
+        return nomineeExtraction(entries).map((entry: any) => ({
+          ...entry,
+          section: SECTION_LABELS[key] || key,
+          fieldKey: key,
+        }));
       }
 
       if (!Array.isArray(entries)) return [];
@@ -62,7 +71,7 @@ const RequestedEntries = () => {
             variant="body1"
             sx={{ fontWeight: 500, fontSize: "1.25rem" }}
           >
-            Already Requested Entries
+            Request History
           </Typography>
         </Box>
 
@@ -90,7 +99,9 @@ const RequestedEntries = () => {
               } else if (item.fieldKey === "bankAccount") {
                 displayText += `: (${item.change?.accountNumber ?? "N/A"})`;
               } else if (item.fieldKey === "segment") {
-                displayText += `: (${item.change?.SegmentIds?.join(", ") ?? "N/A"})`;
+                displayText += `: (${
+                  item.change?.SegmentIds?.join(", ") ?? "N/A"
+                })`;
               }
 
               return (

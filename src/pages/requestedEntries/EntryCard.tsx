@@ -2,8 +2,13 @@ import React from "react";
 import { Box, Typography, useTheme } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import ViewIcon from "../../assests/assets/view.svg";
-import { setDelayText, setRejectionText, setRequestType } from "../../slices/app";
+import {
+  setDelayText,
+  setRejectionText,
+  setRequestType,
+} from "../../slices/app";
 import { useDispatch, useSelector } from "react-redux";
+import { getStatusStyle } from "../../components/common/ViewEntryStatus";
 
 interface EntryCardProps {
   text: string;
@@ -15,6 +20,7 @@ const EntryCard: React.FC<EntryCardProps> = ({ text, id, item }) => {
   const theme = useTheme();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const statusStyle = getStatusStyle(item?.status, theme);
   const changeEntries = useSelector(
     (state: any) => state.app?.data?.changesRequests
   );
@@ -36,12 +42,12 @@ const EntryCard: React.FC<EntryCardProps> = ({ text, id, item }) => {
       dispatch(setDelayText(changeEntries?.emailMeta?.delayText));
       dispatch(setRejectionText(changeEntries?.emailMeta?.reviewText));
       dispatch(setRequestType("email changes."));
-    }else if (item.fieldKey === "segment") {
+    } else if (item.fieldKey === "segment") {
       dispatch(setDelayText(changeEntries?.segmentMeta?.delayText));
       dispatch(setRejectionText(changeEntries?.segmentMeta?.reviewText));
       dispatch(setRequestType("segment changes."));
     }
-    navigate(`/cdu/requestedEntries/viewEntry/${id}`);
+    navigate(`/requestedEntries/viewEntry/${id}`);
   };
 
   return (
@@ -50,9 +56,10 @@ const EntryCard: React.FC<EntryCardProps> = ({ text, id, item }) => {
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
+        gap: 2,
       }}
     >
-      <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+      <Box sx={{ display: "flex", gap: 2, alignItems: "center", width: "65%" }}>
         <Typography
           variant="h6"
           sx={{ fontWeight: 400, color: theme.palette.text.primary }}
@@ -60,7 +67,28 @@ const EntryCard: React.FC<EntryCardProps> = ({ text, id, item }) => {
           {text}
         </Typography>
       </Box>
-      <Box sx={{ display: "flex", alignItems: "center" }}>
+      
+      <Box
+        sx={{
+          // mt: 1,
+          px: 0.5,
+          py: 0.5,
+          borderRadius: "8px",
+          fontWeight: 400,
+          textTransform: "capitalize",
+          fontSize: {xs: "10px", md:"12px"},
+          ...statusStyle,
+          display: "flex",
+          alignItems: "center",
+          width: "25%",
+          justifyContent: "center",
+          textAlign: "center"
+        }}
+      >
+        {item?.status.replaceAll("_", " ").toUpperCase()}
+      </Box>
+
+      <Box sx={{ display: "flex", alignItems: "center", width: "10%" }}>
         <img
           src={ViewIcon}
           alt="Arrow icon"

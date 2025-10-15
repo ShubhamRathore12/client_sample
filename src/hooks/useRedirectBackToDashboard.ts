@@ -11,8 +11,8 @@ const useRedirectBackToDashboard = () => {
     // window.history.pushState(null, "", window.location.href);
 
     const handlePopState = () => {
-      if (location.pathname === "/cdu/requestedEntries") {
-        navigate("/cdu/dashboard", { replace: true });
+      if (location.pathname === "/requestedEntries") {
+        navigate("/dashboard", { replace: true });
       }
     };
 

@@ -13,7 +13,7 @@ type Props = {
   delayText?: string;
 };
 
-const getStatusStyle = (status: string, theme: Theme) => {
+export const getStatusStyle = (status: string, theme: Theme) => {
   switch (status) {
     case "APPROVED":
       return {
@@ -49,7 +49,7 @@ const getStatusStyle = (status: string, theme: Theme) => {
 // const DEFAULT_REQUEST_ALL_TYPE =
 //   "phone number/email/bank details/nominee changes/segment addition";
 
-// const DEFAULT_DAYS = "You have to wait for 7 days before requesting another change";
+// const DEFAULT_DAYS = "You have to wait for 2 days before requesting another change";
 
 const ViewEntryStatus = (props: Props) => {
   const [loading, setLoading] = useState(false);
@@ -77,16 +77,16 @@ const ViewEntryStatus = (props: Props) => {
         requestType.includes("email")
       ) {
         target = "CONTACT";
-        route = "/cdu/updateContact/esign";
+        route = "/updateContact/esign";
       } else if (requestType.includes("nominee")) {
         target = "NOMINEE";
-        route = "/cdu/updateNominee/esign";
+        route = "/updateNominee/esign";
       } else if (requestType.includes("bank")) {
         target = "BANK_ACCOUNT";
-        route = "/cdu/updateBank/esign";
+        route = "/updateBank/esign";
       } else {
         target = "CONTACT";
-        route = "/cdu/updateContact/esign";
+        route = "/updateContact/esign";
       }
       const response: any = await apiService.changeRequestEsignProceed(target);
       if (response?.data?.esign) {
@@ -111,6 +111,9 @@ const ViewEntryStatus = (props: Props) => {
         alignItems: "center",
         gap: 6,
         marginTop: { xs: 2, md: 10 },
+        paddingX: {xs: 2, md: 8},
+        justifyContent: "center",
+        textAlign: "center"
       }}
     >
       <Box>
@@ -131,6 +134,8 @@ const ViewEntryStatus = (props: Props) => {
           display: "flex",
           flexDirection: "column",
           gap: 2,
+          justifyContent: "center",
+          alignItems: "center",
         }}
       >
         <Typography variant="body1" sx={{ fontWeight: 600 }}>
@@ -144,6 +149,7 @@ const ViewEntryStatus = (props: Props) => {
             borderRadius: "8px",
             fontWeight: 500,
             textTransform: "capitalize",
+            width: {xs: "280px", md: "450px"},
             ...statusStyle,
           }}
         >

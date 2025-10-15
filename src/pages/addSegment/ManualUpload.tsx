@@ -60,7 +60,7 @@ function SegmentUploadMannual({}: Props) {
             open={fetchRiskDialogOpen}
             onClose={() => setFetchRiskDialogOpen(false)}
             onSubmit={() => {
-              navigate("/cdu/addSegment/segmentUpload/upload");
+              navigate("/addSegment/segmentUpload/upload");
               setFetchRiskDialogOpen(false);
             }}
           />

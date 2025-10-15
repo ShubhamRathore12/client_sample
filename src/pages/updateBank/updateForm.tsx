@@ -51,9 +51,8 @@ const schema = Yup.object({
 
   bank: Yup.string().required("Bank name is required"),
 
-  micr: Yup.string()
-    .matches(/^\d{9}$/, "MICR must be a 9-digit number"),
-    // .required("MICR is required"),
+  micr: Yup.string().matches(/^\d{9}$/, "MICR must be a 9-digit number"),
+  // .required("MICR is required"),
 
   accountNo: Yup.string()
     .matches(/^\d+$/, "Account number must be numeric")
@@ -104,7 +103,7 @@ const UpdateForm = () => {
           accountNo: existingBankInfo?.accountNumber || "",
           confirmAccountNo: existingBankInfo?.accountNumber || "",
           accountType: existingBankInfo?.isPrimary ? "yes" : "no",
-          bankType: existingBankInfo?.type || "",
+          bankType: existingBankInfo?.type || "SAVING",
           consent: false,
         }
       : {
@@ -115,7 +114,7 @@ const UpdateForm = () => {
           accountNo: "",
           confirmAccountNo: "",
           accountType: "",
-          bankType: "",
+          bankType: "SAVING",
           consent: false,
         };
   // const initialValues: UpdateBankFormValues = {
@@ -192,15 +191,15 @@ const UpdateForm = () => {
             payload
           );
           dispatch(setEsignData(esignData));
-          navigate("/cdu/updateBank/esign");
+          navigate("/updateBank/esign");
           //  else {
-          //   navigate("/cdu/updateBank/esign");
+          //   navigate("/updateBank/esign");
           // }
         } else if (status === "FAILED") {
           stopPolling();
           const bankProofRequired = response?.nextSteps?.BankProof?.required;
           if (bankProofRequired) {
-            navigate("/cdu/updateBank/uploadProof");
+            navigate("/updateBank/uploadProof");
           }
           // showSingleToast.error("Bank verification failed.");
           showSingleToast.error(response?.msg || "Bank verification failed.");
@@ -279,6 +278,7 @@ const UpdateForm = () => {
 
         {field.type === "text" ? (
           <TextField
+            type={field.name === "accountNo" ? "password" : "text"}
             fullWidth
             name={field.name}
             value={(formik.values as any)[field.name]}
@@ -289,10 +289,20 @@ const UpdateForm = () => {
               formik.touched[field.name] &&
               Boolean((formik.errors as any)[field.name])
             }
+            onPaste={
+              field.name === "accountNo" || field?.name === "confirmAccountNo"
+                ? (e) => e.preventDefault()
+                : undefined
+            } // disable paste
+            autoComplete={
+              field.name === "accountNo" || field?.name === "confirmAccountNo"
+                ? "off"
+                : "new-password"
+            }
             helperText={
               formik.touched[field.name] && (formik.errors as any)[field.name]
             }
-            disabled={field?.disabled || false ||isDisabled}
+            disabled={field?.disabled || false || isDisabled}
             inputProps={{
               ...((field.name === "accountNo" ||
                 field?.name === "confirmAccountNo") && {

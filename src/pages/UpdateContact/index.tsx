@@ -54,17 +54,17 @@ const schema = Yup.object({
     otherwise: () => Yup.string().notRequired(),
   }),
 
-  regEmail: Yup.string().when("type", {
-    is: (val: string) => val === "email" || val === "mobileAndEmail",
-    then: () =>
-      Yup.string()
-        .matches(
-          /^[a-z0-9._-]+@[a-z0-9.-]+\.[a-z]{2,}$/,
-          "Invalid email format"
-        )
-        .required("Registered email is required"),
-    otherwise: () => Yup.string().notRequired(),
-  }),
+  regEmail: Yup.string().required("Registered email is required"),
+  // .when("type", {
+  //   is: (val: string) => val === "email" || val === "mobileAndEmail",
+  //   then: () =>
+  //     Yup.string()
+  //       .matches(
+  //         /^[a-z0-9._-]+@[a-z0-9.-]+\.[a-z]{2,}$/,
+  //         "Invalid email format"
+  //       )
+  //   otherwise: () => Yup.string().notRequired(),
+  // }),
 
   newEmail: Yup.string().when("type", {
     is: (val: string) => val === "email" || val === "mobileAndEmail",
@@ -73,6 +73,8 @@ const schema = Yup.object({
         .max(100, "Email must be at most 100 characters")
         .matches(
           /^[a-z0-9._-]+@[a-z0-9.-]+\.[a-z]{2,}$/,
+          // /^[A-Za-z0-9._-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
+          // /^[A-Za-z0-9._]+@[A-Za-z0-9.]+\.[A-Za-z]{2,}$/,
           "Invalid email format. Only letters (a-z), numbers (0-9), and (. _ -) are allowed before the @ symbol."
         )
         // .email(
@@ -127,7 +129,7 @@ const UpdateContact: React.FC = () => {
       );
 
       showSingleToast("OTP sent successfully");
-      navigate("/cdu/updateContact/verify");
+      navigate("/updateContact/verify");
     } catch (error: any) {
       extractErrorAndShowToast(error);
     } finally {
@@ -276,7 +278,7 @@ const UpdateContact: React.FC = () => {
           variant="contained"
           disabled={formik.isSubmitting || !formik.isValid || !formik.dirty}
         >
-          Send OTP and Proceed to E-Sign
+          Send OTP and Proceed
         </Button>
       </ContentBox>
     </PublicLayout>

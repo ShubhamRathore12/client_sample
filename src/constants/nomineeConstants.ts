@@ -171,3 +171,9 @@ export const nomineeFieldConfig = [
     disabled: false,
   },
 ];
+
+export const NOMINEE_NO_CONSENT =
+  "I / We ${username}, hereby confirm that I / We do not wish to appoint any nominee(s) in my / our trading / demat account and understand the issues involved in non-appointment of nominee(s) and further are aware that in case of death of all the account holder(s), my / our legal heirs would need to submit all the requisite documents / information for claiming of assets held in my / our trading / demat account, which may also include documents issued by Court or other such competent authority, based on the value of assets held in the trading / demat account.";
+
+export const NOMINEE_YES_CONSENT =
+  "I want the details of my nominee to be printed in the statement of holding or statement of account, provided to me by the DP as follows:";

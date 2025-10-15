@@ -1,5 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Box, Button, Stack, Typography } from "@mui/material";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Box,
+  Button,
+  Stack,
+  Typography,
+} from "@mui/material";
 import * as Yup from "yup";
 import { useFormik, FormikHelpers } from "formik";
 import { useNavigate } from "react-router-dom";
@@ -16,6 +24,7 @@ import PublicLayout from "../../components/layouts/PublicLayout";
 import extractErrorAndShowToast from "../../utils/extract-error";
 import { showSingleToast } from "../../utils/toast-util";
 import { RootState } from "../../store";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 type Segment = { id: string; isEnabled: boolean; isLocked?: boolean };
 
@@ -73,11 +82,11 @@ const AddSegment: React.FC = () => {
       if (response?.nextSteps?.FileUpload?.required) {
         showSingleToast(response?.nextSteps?.FileUpload?.msg);
         // navigate("/addSegment/segmentUpload");
-        navigate("/cdu/addSegment/segmentUpload/mannual");
+        navigate("/addSegment/segmentUpload/mannual");
       } else {
         showSingleToast("Segment request initiated");
         dispatch(setEsignData(response?.data?.esign));
-        navigate("/cdu/addSegment/esign");
+        navigate("/addSegment/esign");
       }
     } catch (error: any) {
       extractErrorAndShowToast(error);
@@ -183,7 +192,7 @@ const AddSegment: React.FC = () => {
         </Box>
 
         <Stack sx={{ gap: 1, width: "100%" }}>
-          <Typography variant="h6">Segment Type</Typography>
+          {/* <Typography variant="h6">Segment Type</Typography> */}
           <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
             {/* <Button
               onClick={() =>
@@ -231,7 +240,7 @@ const AddSegment: React.FC = () => {
           </Box>
           {/* </Stack> */}
 
-          <Stack sx={{ gap: 1, marginTop: 2 }}>
+          {/* <Stack sx={{ gap: 1, marginTop: 2 }}>
             <Typography variant="h6">Selected Segments</Typography>
             <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
               {dropdowns?.Segment.map((item, idx) => {
@@ -257,7 +266,43 @@ const AddSegment: React.FC = () => {
             {formik.touched.segments && formik.errors.segments && (
               <Typography color="error">{formik.errors.segments}</Typography>
             )}
-          </Stack>
+          </Stack> */}
+
+          <Box>
+            <Accordion sx={{ gap: 1, marginTop: 2, }}>
+              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                <Typography variant="h6">Selected Segments</Typography>
+              </AccordionSummary>
+              <AccordionDetails sx={{ padding: 0 }}>
+                <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
+                  {dropdowns?.Segment.map((item, idx) => {
+                    const isSelected = formik.values.segments.some(
+                      (s) => s.id === item?.id
+                    );
+                    return (
+                      <Button
+                        key={idx}
+                        // onClick={() => handleSegmentToggle(item?.id)}
+                        sx={{
+                          flexBasis: { xs: "100%", sm: "48%" },
+                          flexGrow: 1,
+                          px: 4,
+                        }}
+                        variant={isSelected ? "contained" : "outlined"}
+                      >
+                        {item?.value}
+                      </Button>
+                    );
+                  })}
+                </Box>
+                {formik.touched.segments && formik.errors.segments && (
+                  <Typography color="error">
+                    {formik.errors.segments}
+                  </Typography>
+                )}
+              </AccordionDetails>
+            </Accordion>
+          </Box>
         </Stack>
 
         <ConsentForm

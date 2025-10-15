@@ -1,12 +1,16 @@
 import axios, {
   AxiosError,
+  AxiosHeaders,
   AxiosInstance,
   AxiosRequestConfig,
   AxiosResponse,
+  AxiosRequestHeaders 
 } from "axios";
 import { NomineeRequestPayload } from "../types/cdu";
+import { getCaptcha } from "../utils/catpcha";
 
-const BASE_URL = process.env.BASE_URL || "https://uat-signup.stoxkart.com/cdu/client/api";
+const BASE_URL =
+  process.env.BASE_URL || "https://uat-signup.stoxkart.com/cdu/client/api";
 
 class ApiService {
   client: AxiosInstance;
@@ -29,20 +33,44 @@ class ApiService {
       return config;
     });
 
+    // Attach x-captcha for OTP endpoints
+    this.client.interceptors.request.use(async (config) => {
+      if (
+        config.url?.startsWith("/login/otp/send") ||
+        config.url?.startsWith("/login/otp/verify")
+      ) {
+        try {
+          const token = await getCaptcha();
+
+          // Ensure headers exist and are typed correctly
+          if (!config.headers) {
+            config.headers = new AxiosHeaders(); // Use AxiosHeaders
+          }
+
+          // Set x-captcha
+          (config.headers as  AxiosRequestHeaders ).set("x-captcha-token", token);
+        } catch (err) {
+          console.error("Failed to get captcha token", err);
+        }
+      }
+
+      return config;
+    });
+
     // Response Interceptor: Extract data, handle errors globally
     this.client.interceptors.response.use(
       (response: AxiosResponse) => response.data,
       (error: AxiosError) => {
         if (error.response?.status === 401) {
           if (typeof window !== "undefined") {
-            const publicRoutes = ["/", "/main-verify-otp", "/project-selection", "/cdu", "/cdu/verify-otp", "/rekyc", "/ddpi", "/account-closures"];
+            const publicRoutes = ["/", "/login", "/verifyOTP"];
             const currentPath = window.location.pathname;
 
             const isPublic = publicRoutes.includes(currentPath);
 
             if (!isPublic) {
               localStorage.clear();
-              window.location.href = "/";
+              window.location.href = "/login";
             }
           }
         }
@@ -141,10 +169,9 @@ class ApiService {
       .then((res) => res?.data);
   }
 
-  proceedNominee(payload?: any) {
-    return this.client
-      .post("/nominee/proceed", payload)
-      .then((res) => res?.data);
+  proceedNominee(queryString?: string, payload?: any) {
+    const url = `/nominee/proceed${queryString ?? ""}`;
+    return this.client.post(url, payload).then((res) => res?.data);
   }
 
   esignCheck(payload?: any) {
@@ -175,10 +202,11 @@ class ApiService {
     return this.client.post("/bank/change-init", payload).then((res) => res);
   }
 
-  uploadBankProofFile(file: File, accountId: string) {
+  uploadBankProofFile(file: File, accountId: string, password?: string) {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("accountId", accountId);
+    password && formData.append("password", password);
 
     return this.client
       .post("/bank/verify/file", formData, {
@@ -218,11 +246,17 @@ class ApiService {
     return this.client.post("/segment/request", payload).then((res) => res);
   }
 
-  uploadSegmentFile(file: File, targetId: string,proofType : string ) {
+  uploadSegmentFile(
+    file: File,
+    targetId: string,
+    proofType: string,
+    password?: string
+  ) {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("targetId", targetId);
     formData.append("proofType", proofType);
+    password && formData.append("password", password);
 
     return this.client
       .post("/segment/upload-file", formData, {
